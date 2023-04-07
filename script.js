@@ -1,31 +1,19 @@
 const gameContainer = document.getElementById("game");
 
-const COLORS = [
-  "red",
-  "blue",
-  "green",
-  "orange",
-  "purple",
-  "yellow",
-  "white",
-  "black",
-  "pink",
-  "gray",
-  "skyblue",
-  "maroon",
-  "red",
-  "blue",
-  "green",
-  "orange",
-  "purple",
-  "yellow",
-  "white",
-  "black",
-  "pink",
-  "gray",
-  "skyblue",
-  "maroon",
-];
+//Create Gifs
+let gifs = [];
+function createGifs(count) {
+  console.log(count);
+  if (!count) {
+    count = 8;
+  }
+  gifs = new Array(Number(count) / 2).fill(0).map((value, index) => {
+    return `${index + 1}.gif`;
+  });
+  gifs = gifs.concat(gifs);
+  console.log(gifs);
+  return gifs;
+}
 
 // it returns the same array with values shuffled
 function shuffle(array) {
@@ -45,14 +33,13 @@ function shuffle(array) {
   return array;
 }
 
-let shuffledColors = shuffle(COLORS);
-
-function createDivsForColors(colorArray) {
-  for (let color of colorArray) {
+function createDivsForGifs(shuffledGifs) {
+  for (let gif of shuffledGifs) {
     const newDiv = document.createElement("div");
 
     // give it a class attribute for the value we are looping over
-    newDiv.classList.add(color);
+    console.log("gif", gif);
+    newDiv.classList.add(gif);
 
     newDiv.addEventListener("click", handleCardClick);
 
@@ -67,29 +54,20 @@ let successCount = 0;
 let previousBlock = null;
 let currentBlock = null;
 
-//set local storage score for first game
-if (localStorage.getItem("bestScore") === null) {
-  localStorage.setItem(
-    "bestScore",
-    JSON.stringify({ bestScore: "Not played yet" })
-  );
-} else {
-  //show the best score to player
-  let bestScore = JSON.parse(localStorage.getItem("bestScore")).bestScore;
-  let bestScoreElement = document.querySelector(".best-score");
-  bestScoreElement.innerText = bestScore;
-}
-
 // TODO: Implement this function!
 function handleCardClick(event) {
   // Change color on click
-  event.target.style.background = event.target.getAttribute("class");
+  console.log(event.target);
+  let gif = event.target.getAttribute("class");
+  console.log(gif);
+  event.target.style.background = `url("./gifs/${gif}")`;
 
   // Restrict to click again the same block
   event.target.style.pointerEvents = "none";
 
   clickCount += 1;
   score += 1;
+
   //display the score
   let scoreElement = document.querySelector(".score");
   scoreElement.innerText = score;
@@ -122,22 +100,30 @@ function handleCardClick(event) {
       }, 1000);
 
       //check if match over or not
-      if (successCount === COLORS.length) {
+      if (successCount === gifs.length) {
         console.log("Score:", score);
 
         //Store the score if it is better than last score
-        let bestScoreObj = JSON.parse(localStorage.getItem("bestScore"));
+        let bestScoreObj = JSON.parse(
+          localStorage.getItem(`bestScore${gifs.length}`)
+        );
 
         if (bestScoreObj.bestScore === "Not played yet") {
           bestScoreObj.bestScore = score;
 
-          localStorage.setItem("bestScore", JSON.stringify(bestScoreObj));
+          localStorage.setItem(
+            `bestScore${gifs.length}`,
+            JSON.stringify(bestScoreObj)
+          );
         } else if (bestScoreObj.bestScore > score) {
           bestScoreObj.bestScore = score;
 
-          localStorage.setItem("bestScore", JSON.stringify(bestScoreObj));
+          localStorage.setItem(
+            `bestScore${gifs.length}`,
+            JSON.stringify(bestScoreObj)
+          );
         } else {
-          scoreElement.innerText = `${score} Not crosed best Score :(`;
+          scoreElement.innerText = `${score}  : Not crosed best Score :(`;
         }
 
         //Reload the game after matching all cards
@@ -159,13 +145,41 @@ function handleCardClick(event) {
   }
 }
 // when the DOM loads
-createDivsForColors(shuffledColors);
 
-// load the blocks when the game starts
+//1.Select the number of cards
+let cardsCount = document.querySelector(".cards-count");
+
+cardsCount.addEventListener("change", (event) => {
+  let gifsArray = createGifs(event.target.value);
+  let shuffledGifs = shuffle(gifsArray);
+  let start = document.querySelector(".start");
+
+  //Start button enabled only after selecting number of cards
+  start.style.pointerEvents = "auto";
+
+  createDivsForGifs(shuffledGifs);
+
+  //set local storage score for first game
+  if (localStorage.getItem(`bestScore${gifs.length}`) === null) {
+    localStorage.setItem(
+      `bestScore${gifs.length}`,
+      JSON.stringify({ bestScore: "Not played yet" })
+    );
+  } else {
+    //show the best score to player
+    let bestScore = JSON.parse(
+      localStorage.getItem(`bestScore${gifs.length}`)
+    ).bestScore;
+    let bestScoreElement = document.querySelector(".best-score");
+    bestScoreElement.innerText = bestScore;
+  }
+});
+
 let start = document.querySelector(".start");
 let cards = document.querySelector("#game");
 let scoreBoard = document.querySelector(".score-board");
 let restart = document.querySelector(".restart");
+let menu = document.querySelector(".menu");
 
 //On pressign Start button
 start.addEventListener("click", (event) => {
@@ -173,6 +187,7 @@ start.addEventListener("click", (event) => {
   event.target.style.display = "none";
   scoreBoard.style.display = "block";
   restart.style.display = "block";
+  menu.style.display = "none";
 });
 
 //On pressing restart button
