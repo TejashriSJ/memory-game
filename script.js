@@ -1,4 +1,8 @@
-const gameContainer = document.getElementsById("game");
+const gameContainer = document.getElementById("game");
+const openedBlocks = { block1: null, block2: null };
+
+//storign colors in local storage
+localStorage.setItem("openedBlocks", JSON.stringify(openedBlocks));
 
 const COLORS = [
   "red",
@@ -6,11 +10,25 @@ const COLORS = [
   "green",
   "orange",
   "purple",
+  "yellow",
+  "white",
+  "black",
+  "pink",
+  "gray",
+  "skyblue",
+  "maroon",
   "red",
   "blue",
   "green",
   "orange",
-  "purple"
+  "purple",
+  "yellow",
+  "white",
+  "black",
+  "pink",
+  "gray",
+  "skyblue",
+  "maroon",
 ];
 
 // here is a helper function to shuffle an array
@@ -50,17 +68,66 @@ function createDivsForColors(colorArray) {
     newDiv.classList.add(color);
 
     // call a function handleCardClick when a div is clicked on
+
     newDiv.addEventListener("click", handleCardClick);
 
     // append the div to the element with an id of game
     gameContainer.append(newDiv);
   }
 }
+let clickCount = 0;
+let successCount = 0;
+let previousBlock = null;
+let currentBlock = null;
 
 // TODO: Implement this function!
 function handleCardClick(event) {
-  // you can use event.target to see which element was clicked
-  console.log("you clicked",event.target);
+  // Change color on click
+  event.target.style.background = event.target.getAttribute("class");
+
+  // Restrict to click again the same block
+  event.target.style.pointerEvents = "none";
+
+  clickCount += 1;
+
+  if (clickCount === 2) {
+    previousBlock = currentBlock;
+    currentBlock = event.target;
+
+    //Restrict to click the other blocks for 1 sec
+    event.target.parentElement.style.pointerEvents = "none";
+
+    clickCount = 0;
+
+    if (
+      previousBlock.getAttribute("class") !== currentBlock.getAttribute("class")
+    ) {
+      setTimeout(() => {
+        previousBlock.removeAttribute("style");
+        currentBlock.removeAttribute("style");
+
+        event.target.parentElement.style.pointerEvents = "auto";
+      }, 1000);
+    } else {
+      previousBlock.style.border = "2px solid green";
+      currentBlock.style.border = "2px solid green";
+      successCount += 2;
+
+      setTimeout(() => {
+        event.target.parentElement.style.pointerEvents = "auto";
+      }, 1000);
+      if (successCount === COLORS.length) {
+        //Reload the game after matching all cards
+        let success = document.querySelector(".success-message");
+        success.style.display = "block";
+        setTimeout(() => {
+          location.reload();
+        }, 4000);
+      }
+    }
+  } else {
+    currentBlock = event.target;
+  }
 }
 
 // when the DOM loads
