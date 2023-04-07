@@ -1,8 +1,4 @@
 const gameContainer = document.getElementById("game");
-const openedBlocks = { block1: null, block2: null };
-
-//storign colors in local storage
-localStorage.setItem("openedBlocks", JSON.stringify(openedBlocks));
 
 const COLORS = [
   "red",
@@ -31,9 +27,7 @@ const COLORS = [
   "maroon",
 ];
 
-// here is a helper function to shuffle an array
 // it returns the same array with values shuffled
-// it is based on an algorithm called Fisher Yates if you want ot research more
 function shuffle(array) {
   let counter = array.length;
 
@@ -41,10 +35,7 @@ function shuffle(array) {
   while (counter > 0) {
     // Pick a random index
     let index = Math.floor(Math.random() * counter);
-
-    // Decrease counter by 1
     counter--;
-
     // And swap the last element with it
     let temp = array[counter];
     array[counter] = array[index];
@@ -56,29 +47,38 @@ function shuffle(array) {
 
 let shuffledColors = shuffle(COLORS);
 
-// this function loops over the array of colors
-// it creates a new div and gives it a class with the value of the color
-// it also adds an event listener for a click for each card
 function createDivsForColors(colorArray) {
   for (let color of colorArray) {
-    // create a new div
     const newDiv = document.createElement("div");
 
     // give it a class attribute for the value we are looping over
     newDiv.classList.add(color);
 
-    // call a function handleCardClick when a div is clicked on
-
     newDiv.addEventListener("click", handleCardClick);
 
-    // append the div to the element with an id of game
     gameContainer.append(newDiv);
   }
+  return true;
 }
+
 let clickCount = 0;
+let score = 0;
 let successCount = 0;
 let previousBlock = null;
 let currentBlock = null;
+
+//set local storage score for first game
+if (localStorage.getItem("bestScore") === null) {
+  localStorage.setItem(
+    "bestScore",
+    JSON.stringify({ bestScore: "Not played yet" })
+  );
+} else {
+  //show the best score to player
+  let bestScore = JSON.parse(localStorage.getItem("bestScore")).bestScore;
+  let bestScoreElement = document.querySelector(".best-score");
+  bestScoreElement.innerText = bestScore;
+}
 
 // TODO: Implement this function!
 function handleCardClick(event) {
@@ -89,6 +89,10 @@ function handleCardClick(event) {
   event.target.style.pointerEvents = "none";
 
   clickCount += 1;
+  score += 1;
+  //display the score
+  let scoreElement = document.querySelector(".score");
+  scoreElement.innerText = score;
 
   if (clickCount === 2) {
     previousBlock = currentBlock;
@@ -116,19 +120,62 @@ function handleCardClick(event) {
       setTimeout(() => {
         event.target.parentElement.style.pointerEvents = "auto";
       }, 1000);
+
+      //check if match over or not
       if (successCount === COLORS.length) {
+        console.log("Score:", score);
+
+        //Store the score if it is better than last score
+        let bestScoreObj = JSON.parse(localStorage.getItem("bestScore"));
+
+        if (bestScoreObj.bestScore === "Not played yet") {
+          bestScoreObj.bestScore = score;
+
+          localStorage.setItem("bestScore", JSON.stringify(bestScoreObj));
+        } else if (bestScoreObj.bestScore > score) {
+          bestScoreObj.bestScore = score;
+
+          localStorage.setItem("bestScore", JSON.stringify(bestScoreObj));
+        } else {
+          scoreElement.innerText = `${score} Not crosed best Score :(`;
+        }
+
         //Reload the game after matching all cards
         let success = document.querySelector(".success-message");
         success.style.display = "block";
-        setTimeout(() => {
+
+        let playAgain = document.querySelector(".play-again");
+        playAgain.style.display = "block";
+        playAgain.addEventListener("click", (event) => {
           location.reload();
-        }, 4000);
+        });
+
+        let restart = document.querySelector(".restart");
+        restart.style.display = "none";
       }
     }
   } else {
     currentBlock = event.target;
   }
 }
-
 // when the DOM loads
 createDivsForColors(shuffledColors);
+
+// load the blocks when the game starts
+let start = document.querySelector(".start");
+let cards = document.querySelector("#game");
+let scoreBoard = document.querySelector(".score-board");
+let restart = document.querySelector(".restart");
+
+//On pressign Start button
+start.addEventListener("click", (event) => {
+  cards.style.display = "block";
+  event.target.style.display = "none";
+  scoreBoard.style.display = "block";
+  restart.style.display = "block";
+});
+
+//On pressing restart button
+restart.addEventListener("click", (event) => {
+  location.reload();
+});
