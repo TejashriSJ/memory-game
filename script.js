@@ -119,22 +119,22 @@ function handleCardClick(event) {
 
       //check if match over or not
       if (successCount === gifs.length) {
-        console.log("Score:", score);
-
         //Store the score if it is better than last score
         let bestScoreObj = JSON.parse(
           localStorage.getItem(`bestScore${gifs.length}`)
         );
+        let bestScoreElement = document.querySelector(".best-score");
 
         if (bestScoreObj.bestScore === "Not played yet") {
           bestScoreObj.bestScore = score;
-          console.log("best score Added as 0 -113");
+          bestScoreElement.innerText = score;
           localStorage.setItem(
             `bestScore${gifs.length}`,
             JSON.stringify(bestScoreObj)
           );
         } else if (bestScoreObj.bestScore > score) {
           bestScoreObj.bestScore = score;
+          bestScoreElement.innerText = score;
           scoreElement.innerText = `${score}  : New Best Score :)`;
           localStorage.setItem(
             `bestScore${gifs.length}`,
