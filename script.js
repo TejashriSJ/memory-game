@@ -11,7 +11,6 @@ function createGifs(count) {
     return `${index + 1}.gif`;
   });
   gifs = gifs.concat(gifs);
-  console.log(gifs);
   return gifs;
 }
 
@@ -38,7 +37,6 @@ function createDivsForGifs(shuffledGifs) {
     const newDiv = document.createElement("div");
 
     // give it a class attribute for the value we are looping over
-    console.log("gif", gif);
     newDiv.classList.add(gif);
 
     newDiv.addEventListener("click", handleCardClick);
@@ -74,8 +72,7 @@ function detectInternet() {
 
 // TODO: Implement this function!
 function handleCardClick(event) {
-  // Change color on click
-
+  // Change background to gif on click
   let gif = event.target.getAttribute("class");
 
   event.target.style.background = `url("./gifs/${gif}")`;
