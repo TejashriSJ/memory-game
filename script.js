@@ -117,7 +117,7 @@ function handleCardClick(event) {
           );
         } else if (bestScoreObj.bestScore > score) {
           bestScoreObj.bestScore = score;
-
+          scoreElement.innerText = `${score}  : New Best Score :)`;
           localStorage.setItem(
             `bestScore${gifs.length}`,
             JSON.stringify(bestScoreObj)
@@ -161,12 +161,12 @@ cardsCount.addEventListener("change", (event) => {
 
   //set local storage score for first game
   if (localStorage.getItem(`bestScore${gifs.length}`) === null) {
-    console.log("best score Added as 0");
     localStorage.setItem(
       `bestScore${gifs.length}`,
       JSON.stringify({ bestScore: "Not played yet" })
     );
     let bestScoreElement = document.querySelector(".best-score");
+
     bestScoreElement.innerText = "Not played yet";
   } else {
     //show the best score to player
@@ -175,8 +175,8 @@ cardsCount.addEventListener("change", (event) => {
     ).bestScore;
 
     let bestScoreElement = document.querySelector(".best-score");
+
     bestScoreElement.innerText = bestScore;
-    console.log("best score Added as 0 - 176");
   }
 });
 
