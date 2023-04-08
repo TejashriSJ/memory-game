@@ -1,5 +1,7 @@
 body {
   background: linear-gradient(to left, rgb(196, 70, 48), pink, white);
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
@@ -9,7 +11,7 @@ h1 {
   padding: 1rem;
   border: 1px solid white;
   border-radius: 1rem;
-  box-shadow: 1rem 1rem 2rem gray;
+  box-shadow: 1rem 1rem 2rem rgb(126, 78, 78);
 }
 .heading {
   display: flex;
@@ -69,6 +71,21 @@ button {
 }
 .score-board {
   display: none;
+  border: 1px solid maroon;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  width: fit-content;
+  background: linear-gradient(to right, white, gray);
+  box-shadow: 1rem 1rem 2rem rgb(126, 78, 78);
+  margin-bottom: 1rem;
+  align-self: center;
+}
+.score-heading {
+  text-decoration: underline;
+  font-size: large;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: bolder;
+  color: rgb(65, 61, 61);
 }
 #game {
   display: none;
