@@ -54,12 +54,30 @@ let successCount = 0;
 let previousBlock = null;
 let currentBlock = null;
 
+//To check the internet
+window.addEventListener("offline", (event) => {
+  detectInternet();
+});
+
+function detectInternet() {
+  let cardsBlock = document.querySelector("#game");
+  let body = document.querySelector("body");
+  let errorMessage = document.createElement("p");
+
+  errorMessage.classList = "error";
+  errorMessage.innerText =
+    "No Network! Please Connect to the internet and restart the game";
+
+  cardsBlock.style.display = "none";
+  body.appendChild(errorMessage);
+}
+
 // TODO: Implement this function!
 function handleCardClick(event) {
   // Change color on click
-  console.log(event.target);
+
   let gif = event.target.getAttribute("class");
-  console.log(gif);
+
   event.target.style.background = `url("./gifs/${gif}")`;
 
   // Restrict to click again the same block
