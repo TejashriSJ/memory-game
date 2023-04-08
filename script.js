@@ -141,7 +141,7 @@ function handleCardClick(event) {
             JSON.stringify(bestScoreObj)
           );
         } else {
-          scoreElement.innerText = `${score}  : Not crosed best Score :(`;
+          scoreElement.innerText = `${score}  : Try again to beat the best score :(`;
         }
 
         //Reload the game after matching all cards
