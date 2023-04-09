@@ -3,10 +3,6 @@ const gameContainer = document.getElementById("game");
 //Create Gifs
 let gifs = [];
 function createGifs(count) {
-  console.log(count);
-  if (!count) {
-    count = 8;
-  }
   gifs = new Array(Number(count) / 2).fill(0).map((value, index) => {
     return `${index + 1}.gif`;
   });
@@ -17,7 +13,6 @@ function createGifs(count) {
 // it returns the same array with values shuffled
 function shuffle(array) {
   let counter = array.length;
-
   // While there are elements in the array
   while (counter > 0) {
     // Pick a random index
@@ -28,7 +23,6 @@ function shuffle(array) {
     array[counter] = array[index];
     array[index] = temp;
   }
-
   return array;
 }
 
@@ -38,37 +32,71 @@ function createDivsForGifs(shuffledGifs) {
 
     // give it a class attribute for the value we are looping over
     newDiv.classList.add(gif);
-
     newDiv.addEventListener("click", handleCardClick);
-
     gameContainer.append(newDiv);
   }
   return true;
 }
+
+let gifsArray;
+let shuffledGifs;
+function createSpecifiedNUmberOfDivs(cardCount) {
+  gifsArray = createGifs(cardCount);
+  shuffledGifs = shuffle(gifsArray);
+  createDivsForGifs(shuffledGifs);
+}
+
+//1.Select the number of cards
+
+let scoreBoard = document.querySelector(".score-board");
+let restart = document.querySelector(".restart");
+let exit = document.querySelector(".exit");
+let menu = document.querySelector(".menu");
+let gameLevel = document.querySelector(".game-level");
+
+let cardCount;
+
+gameLevel.addEventListener("click", (event) => {
+  gameContainer.style.display = "block";
+  scoreBoard.style.display = "block";
+  restart.style.display = "block";
+  exit.style.display = "block";
+  menu.style.display = "none";
+
+  if (event.target.value === "Easy") {
+    cardCount = 8;
+    createSpecifiedNUmberOfDivs(cardCount);
+  } else if (event.target.value === "Medium") {
+    cardCount = 16;
+    createSpecifiedNUmberOfDivs(cardCount);
+  } else {
+    cardCount = 24;
+    createSpecifiedNUmberOfDivs(cardCount);
+  }
+
+  //set local storage score for first game
+  if (localStorage.getItem(`bestScore${gifs.length}`) === null) {
+    localStorage.setItem(
+      `bestScore${gifs.length}`,
+      JSON.stringify({ bestScore: " --" })
+    );
+
+    document.querySelector(".best-score").innerText = " --";
+  } else {
+    //show the best score to player
+    let bestScore = JSON.parse(
+      localStorage.getItem(`bestScore${gifs.length}`)
+    ).bestScore;
+
+    document.querySelector(".best-score").innerText = bestScore;
+  }
+});
 
 let clickCount = 0;
 let score = 0;
 let successCount = 0;
 let previousBlock = null;
 let currentBlock = null;
-
-//To check the internet
-window.addEventListener("offline", (event) => {
-  detectInternet();
-});
-
-function detectInternet() {
-  let cardsBlock = document.querySelector("#game");
-  let body = document.querySelector("body");
-  let errorMessage = document.createElement("p");
-
-  errorMessage.classList = "error";
-  errorMessage.innerText =
-    "No Network! Please Connect to the internet and restart the game";
-
-  cardsBlock.style.display = "none";
-  body.appendChild(errorMessage);
-}
 
 // TODO: Implement this function!
 function handleCardClick(event) {
@@ -92,8 +120,8 @@ function handleCardClick(event) {
     currentBlock = event.target;
 
     //Restrict to click the other blocks for 1 sec
-    event.target.parentElement.style.pointerEvents = "none";
 
+    event.target.parentElement.style.pointerEvents = "none";
     clickCount = 0;
 
     if (
@@ -122,9 +150,10 @@ function handleCardClick(event) {
         );
         let bestScoreElement = document.querySelector(".best-score");
 
-        if (bestScoreObj.bestScore === "Not played yet") {
+        if (bestScoreObj.bestScore === " --") {
           bestScoreObj.bestScore = score;
           bestScoreElement.innerText = score;
+
           localStorage.setItem(
             `bestScore${gifs.length}`,
             JSON.stringify(bestScoreObj)
@@ -132,6 +161,7 @@ function handleCardClick(event) {
         } else if (bestScoreObj.bestScore > score) {
           bestScoreObj.bestScore = score;
           bestScoreElement.innerText = score;
+
           scoreElement.innerText = `${score}  : New Best Score :)`;
           localStorage.setItem(
             `bestScore${gifs.length}`,
@@ -141,76 +171,60 @@ function handleCardClick(event) {
           scoreElement.innerText = `${score}  : Try again to beat the best score :(`;
         }
 
-        //Reload the game after matching all cards
         let success = document.querySelector(".success-message");
         success.style.display = "block";
 
         let playAgain = document.querySelector(".play-again");
         playAgain.style.display = "block";
+
         playAgain.addEventListener("click", (event) => {
           location.reload();
         });
 
-        let restart = document.querySelector(".restart");
         restart.style.display = "none";
+        exit.style.display = "none";
       }
     }
   } else {
     currentBlock = event.target;
   }
 }
-// when the DOM loads
-
-//1.Select the number of cards
-let cardsCount = document.querySelector(".cards-count");
-
-cardsCount.addEventListener("change", (event) => {
-  let gifsArray = createGifs(event.target.value);
-  let shuffledGifs = shuffle(gifsArray);
-  let start = document.querySelector(".start");
-
-  //Start button enabled only after selecting number of cards
-  start.style.pointerEvents = "auto";
-
-  createDivsForGifs(shuffledGifs);
-
-  //set local storage score for first game
-  if (localStorage.getItem(`bestScore${gifs.length}`) === null) {
-    localStorage.setItem(
-      `bestScore${gifs.length}`,
-      JSON.stringify({ bestScore: "Not played yet" })
-    );
-    let bestScoreElement = document.querySelector(".best-score");
-
-    bestScoreElement.innerText = "Not played yet";
-  } else {
-    //show the best score to player
-    let bestScore = JSON.parse(
-      localStorage.getItem(`bestScore${gifs.length}`)
-    ).bestScore;
-
-    let bestScoreElement = document.querySelector(".best-score");
-
-    bestScoreElement.innerText = bestScore;
-  }
-});
-
-let start = document.querySelector(".start");
-let cards = document.querySelector("#game");
-let scoreBoard = document.querySelector(".score-board");
-let restart = document.querySelector(".restart");
-let menu = document.querySelector(".menu");
-
-//On pressign Start button
-start.addEventListener("click", (event) => {
-  cards.style.display = "block";
-  event.target.style.display = "none";
-  scoreBoard.style.display = "block";
-  restart.style.display = "block";
-  menu.style.display = "none";
-});
 
 //On pressing restart button
 restart.addEventListener("click", (event) => {
+  clickCount = 0;
+  score = 0;
+  previousBlock = null;
+  currentBlock = null;
+  document.querySelector(".score").innerText = score;
+  gameContainer.innerHTML = "";
+
+  setTimeout(() => {
+    gifsArray = createGifs(cardCount);
+    shuffledGifs = shuffle(gifsArray);
+    createDivsForGifs(shuffledGifs);
+  }, 100);
+});
+
+// onclick exit
+exit.addEventListener("click", () => {
   location.reload();
 });
+
+//To check the internet
+window.addEventListener("offline", (event) => {
+  detectInternet();
+});
+
+function detectInternet() {
+  let cardsBlock = document.querySelector("#game");
+  let body = document.querySelector("body");
+  let errorMessage = document.createElement("p");
+
+  errorMessage.classList = "error";
+  errorMessage.innerText =
+    "No Network! Please Connect to the internet and restart the game";
+
+  cardsBlock.style.display = "none";
+  body.appendChild(errorMessage);
+}

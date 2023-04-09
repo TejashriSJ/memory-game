@@ -13,27 +13,30 @@
     <div class="heading">
       
       <h1><span><i class="fa-sharp fa-solid fa-brain fa-lg" style="color: white;"></i></span> Memory Game!</h1>
-      
-      <button class="restart">Restart Game</button>
-      <button class="play-again">Play Again</button>
-    </div>
-    <div class="menu">
-      <h2>Select the number of cards</h2>
-      <select class= "cards-count" name="cards-count">
-        <option value="">Select</option>
-        <option value="8">8</option>
-        <option value="16">16</option>
-        ,<option value="24">24</option>
-      </select>
-      <button class="start">Start Game</button>
+      <div class="navigations">
+        <button class="restart">Restart Game</button>
+        <button class="exit">Exit</button> 
+        <button class="play-again">Play Again</button>
+      </div>
 
     </div>
+    <div class="menu">
+      <h2>Select Level</h2>
+      <div class="game-level">
+        <button  value="Easy">Easy</button>
+        <button  value="Medium">Medium</button>
+        <button  value="Hard">Hard</button>
+      </div>
+
+
+    </div>
+    <p class="success-message">Congradulations!! You Won... You can Play again</p>
     <div class="score-board">
       <h3 class="score-heading">Score Board</h3>
       <h3>Score: <span class="score">0</span></h3>
       <h3>Best Score:<span class="best-score">0</span></h3>
     </div>
-    <p class="success-message">Congradulations!! You Won... You can Play again</p>
+    
     <div id="game">
     <script src="script.js"></script>
   </body>

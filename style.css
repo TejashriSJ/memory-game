@@ -1,7 +1,16 @@
 body {
   background: linear-gradient(to left, rgb(196, 70, 48), pink, white);
+  background: url("./images/bg12.jpeg");
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0px;
 }
 
 h1 {
@@ -9,45 +18,35 @@ h1 {
   background: linear-gradient(to bottom, maroon, pink);
   width: fit-content;
   padding: 1rem;
+  margin-top: 5rem;
   border: 1px solid white;
   border-radius: 1rem;
   box-shadow: 1rem 1rem 2rem rgb(126, 78, 78);
 }
 .heading {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 2rem;
 }
 .menu {
   display: flex;
   flex-direction: column;
-  height: 20rem;
-  width: 20rem;
+  height: 30rem;
+  width: 25rem;
   background: white;
-  box-shadow: 1rem 1rem 1rem gray;
+  box-shadow: 1rem 1rem 1rem rgb(128, 19, 15);
   border: 2px solid maroon;
   padding: 1rem;
   border-radius: 0.5rem;
   justify-content: space-around;
   align-items: center;
-  margin-top: 6rem;
-  margin-left: 10rem;
+  align-self: center;
+  margin-bottom: 6rem;
 }
-h2 {
-  color: white;
-  background: linear-gradient(to bottom, maroon, white);
-  padding: 1rem;
-  border: 1px solid white;
-  border-radius: 0.5rem;
-}
-select {
-  width: 10rem;
-  height: 2rem;
-  border: 1px solid maroon;
-  border-radius: 0.2rem;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  font-size: large;
-  font-weight: bold;
+.navigations {
+  display: flex;
+  gap: 2rem;
 }
 button {
   color: rgb(252, 250, 250);
@@ -60,9 +59,41 @@ button {
   height: fit-content;
   cursor: pointer;
 }
-.start {
-  pointer-events: none;
+.exit {
+  display: none;
+  width: 10rem;
+  cursor: pointer;
 }
+.game-level {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-size: x-large;
+  font-family: cursive;
+  margin-bottom: 3rem;
+}
+.game-level :hover {
+  font-size: x-large;
+}
+h2 {
+  color: white;
+  background: linear-gradient(to bottom, maroon, white);
+  padding: 1rem;
+  border: 1px solid white;
+  border-radius: 0.5rem;
+  font-family: "Times New Roman", Times, serif;
+}
+select {
+  width: 10rem;
+  height: 2rem;
+  border: 1px solid maroon;
+  border-radius: 0.2rem;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: large;
+  font-weight: bold;
+}
+
 .restart {
   display: none;
 }
@@ -74,30 +105,45 @@ button {
   border: 1px solid maroon;
   border-radius: 0.5rem;
   padding: 1rem;
-  width: fit-content;
-  background: linear-gradient(to right, white, gray);
+  width: 30rem;
+  text-align: center;
+  background: white;
   box-shadow: 1rem 1rem 2rem rgb(126, 78, 78);
   margin-bottom: 1rem;
   align-self: center;
+  margin-top: -5rem;
 }
 .score-heading {
   text-decoration: underline;
-  font-size: large;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 900;
+  font-family: monospace;
   font-weight: bolder;
-  color: rgb(65, 61, 61);
+  color: rgb(82, 3, 3);
 }
 #game {
   display: none;
+  background: url("./images/ibg2.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+  width: 42rem;
+  padding: 5rem;
+  margin-top: -10rem;
+  flex-wrap: wrap;
 }
 #game div {
   border: 1px solid black;
-  width: 15%;
-  height: 200px;
-  margin: 10px;
+  height: 8rem;
+  width: 8rem;
+  margin: 1rem;
   border-radius: 0.5em;
-  background: linear-gradient(to right, maroon, pink);
+  background: url("./images/bg.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   display: inline-block;
+  cursor: pointer;
 }
 
 .success-message {
@@ -107,6 +153,8 @@ button {
   width: fit-content;
   padding: 1rem;
   display: none;
+  margin-top: -6rem;
+  margin-bottom: -4rem;
 }
 .error {
   font-size: large;
