@@ -73,9 +73,7 @@ button {
   font-family: cursive;
   margin-bottom: 3rem;
 }
-.game-level :hover {
-  font-size: x-large;
-}
+
 h2 {
   color: white;
   background: linear-gradient(to bottom, maroon, white);
@@ -138,10 +136,10 @@ select {
   width: 8rem;
   margin: 1rem;
   border-radius: 0.5em;
-  background: url("./images/bg.webp");
-  background-size: cover;
+  background-image: url("./images/bg.webp");
   background-repeat: no-repeat;
   background-position: center;
+  background-size: cover;
   display: inline-block;
   cursor: pointer;
 }

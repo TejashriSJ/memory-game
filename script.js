@@ -13,12 +13,10 @@ function createGifs(count) {
 // it returns the same array with values shuffled
 function shuffle(array) {
   let counter = array.length;
-  // While there are elements in the array
+
   while (counter > 0) {
-    // Pick a random index
     let index = Math.floor(Math.random() * counter);
     counter--;
-    // And swap the last element with it
     let temp = array[counter];
     array[counter] = array[index];
     array[index] = temp;
@@ -30,7 +28,6 @@ function createDivsForGifs(shuffledGifs) {
   for (let gif of shuffledGifs) {
     const newDiv = document.createElement("div");
 
-    // give it a class attribute for the value we are looping over
     newDiv.classList.add(gif);
     newDiv.addEventListener("click", handleCardClick);
     gameContainer.append(newDiv);
@@ -102,8 +99,7 @@ let currentBlock = null;
 function handleCardClick(event) {
   // Change background to gif on click
   let gif = event.target.getAttribute("class");
-
-  event.target.style.background = `url("./gifs/${gif}")`;
+  event.target.style.backgroundImage = `url("./gifs/${gif}")`;
 
   // Restrict to click again the same block
   event.target.style.pointerEvents = "none";
@@ -223,7 +219,7 @@ function detectInternet() {
 
   errorMessage.classList = "error";
   errorMessage.innerText =
-    "No Network! Please Connect to the internet and restart the game";
+    "No network! Please connect to the internet and reload the page";
 
   cardsBlock.style.display = "none";
   body.appendChild(errorMessage);
