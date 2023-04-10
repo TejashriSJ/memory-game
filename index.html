@@ -3,41 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <title>Memory Game!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sigmar+One&display=swap"
+      rel="stylesheet"
+    />
     <script
-    src="https://kit.fontawesome.com/70456f34ed.js"
-    crossorigin="anonymous"
-  ></script>
+      src="https://kit.fontawesome.com/70456f34ed.js"
+      crossorigin="anonymous"
+    ></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="heading">
-      
-      <h1><span><i class="fa-sharp fa-solid fa-brain fa-lg" style="color: white;"></i></span> Memory Game!</h1>
-      <div class="navigations">
-        <button class="restart">Restart Game</button>
-        <button class="exit">Exit</button> 
-        <button class="play-again">Play Again</button>
-      </div>
-
+      <h1>
+        <span
+          ><i class="fa-sharp fa-solid fa-brain fa-lg" style="color: white"></i
+        ></span>
+        Memory Game!
+      </h1>
     </div>
     <div class="menu">
       <h2>Select Level</h2>
       <div class="game-level">
-        <button  value="Easy">Easy</button>
-        <button  value="Medium">Medium</button>
-        <button  value="Hard">Hard</button>
+        <button value="Easy">Easy</button>
+        <button value="Medium">Medium</button>
+        <button value="Hard">Hard</button>
       </div>
-
-
     </div>
-    <p class="success-message">Congradulations!! You Won... You can Play again</p>
+
     <div class="score-board">
       <h3 class="score-heading">Score Board</h3>
       <h3>Score: <span class="score">0</span></h3>
       <h3>Best Score:<span class="best-score">0</span></h3>
     </div>
-    
-    <div id="game">
+
+    <div id="game"></div>
+    <p class="success-message">
+      Congradulations!! You Won... You can Play again
+    </p>
+    <div class="navigations">
+      <button class="restart">Restart Game</button>
+      <button class="exit">Exit</button>
+      <button class="play-again">Play Again</button>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
