@@ -44,7 +44,6 @@ function createSpecifiedNUmberOfDivs(cardCount) {
 }
 
 //1.Select the number of cards
-
 let scoreBoard = document.querySelector(".score-board");
 let restart = document.querySelector(".restart");
 let exit = document.querySelector(".exit");
@@ -109,6 +108,7 @@ function handleCardClick(event) {
 
   //display the score
   let scoreElement = document.querySelector(".score");
+  let scoreMessage = document.querySelector(".score-message");
   scoreElement.innerText = score;
 
   if (clickCount === 2) {
@@ -158,13 +158,17 @@ function handleCardClick(event) {
           bestScoreObj.bestScore = score;
           bestScoreElement.innerText = score;
 
-          scoreElement.innerText = `${score}  : New Best Score :)`;
+          scoreElement.innerText = `${score}`;
+          scoreMessage.innerText = `New Best Score :)`;
+          scoreMessage.style.display = "block";
           localStorage.setItem(
             `bestScore${gifs.length}`,
             JSON.stringify(bestScoreObj)
           );
         } else {
-          scoreElement.innerText = `${score}  : Try again to beat the best score :(`;
+          scoreElement.innerText = `${score}`;
+          scoreMessage.innerText = `Try again to beat the best score :(`;
+          scoreMessage.style.display = "block";
         }
 
         let success = document.querySelector(".success-message");
@@ -186,25 +190,51 @@ function handleCardClick(event) {
   }
 }
 
-//On pressing restart button
-restart.addEventListener("click", (event) => {
-  clickCount = 0;
-  score = 0;
-  previousBlock = null;
-  currentBlock = null;
-  document.querySelector(".score").innerText = score;
-  gameContainer.innerHTML = "";
+let promptMessageBlock = document.querySelector(".prompt-message-block");
+let promptMessage = document.querySelector(".prompt-message");
+let promptButtons = document.querySelector(".prompt-buttons");
+let yesButton = document.querySelector(".yes");
 
-  setTimeout(() => {
-    gifsArray = createGifs(cardCount);
-    shuffledGifs = shuffle(gifsArray);
-    createDivsForGifs(shuffledGifs);
-  }, 100);
+// On pressing exit button
+exit.addEventListener("click", (event) => {
+  gameContainer.style.display = "none";
+  promptMessage.innerText = "Are you sure you want to QUIT the game?";
+  promptMessageBlock.style.display = "block";
+  yesButton.className = "exitYes";
+});
+//On pressing restart button
+
+restart.addEventListener("click", (event) => {
+  gameContainer.style.display = "none";
+  promptMessage.innerText = "Are you sure you want to RESTART the game?";
+  promptMessageBlock.style.display = "block";
+  yesButton.className = "restartYes";
 });
 
-// onclick exit
-exit.addEventListener("click", () => {
-  location.reload();
+promptButtons.addEventListener("click", (event) => {
+  promptMessageBlock.style.display = "none";
+  if (event.target.value === "yes") {
+    if (event.target.className === "restartYes") {
+      clickCount = 0;
+      score = 0;
+      successCount = 0;
+      previousBlock = null;
+      currentBlock = null;
+      document.querySelector(".score").innerText = score;
+      gameContainer.innerHTML = "";
+
+      setTimeout(() => {
+        gifsArray = createGifs(cardCount);
+        shuffledGifs = shuffle(gifsArray);
+        createDivsForGifs(shuffledGifs);
+        gameContainer.style.display = "block";
+      }, 100);
+    } else {
+      location.reload();
+    }
+  } else {
+    gameContainer.style.display = "block";
+  }
 });
 
 //To check the internet
@@ -217,10 +247,10 @@ function detectInternet() {
   let body = document.querySelector("body");
   let errorMessage = document.createElement("p");
 
-  errorMessage.classList = "error";
+  errorMessage.className = "error";
   errorMessage.innerText =
     "No network! Please connect to the internet and reload the page";
 
   cardsBlock.style.display = "none";
-  body.appendChild(errorMessage);
+  body.insertBefore(errorMessage, cardsBlock);
 }
